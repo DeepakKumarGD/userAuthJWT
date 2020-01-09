@@ -70,35 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js")
-                .permitAll()
-                .antMatchers("/api/auth/**")
-                .permitAll()
-                .antMatchers(
-                        "/api/user/checkEmailAvailability",
-                        "/api/user/activateAccount",
-                        "/api/user/startPasswordReset",
-                        "/api/user/completePasswordReset",
-                        "/api/user/resendActivateAccountEmail")
-                .permitAll()
-                .antMatchers("/common/**",
-                        "/v2/api-docs",
-                        "/configuration/ui",
-                        "/swagger-resources",
-                        "/configuration/security",
-                        "/swagger-ui.html",
-                        "/webjars/**")
-                .permitAll()
                 .anyRequest()
-                .authenticated();
+                .permitAll();
 
         // Add our custom JWT security filter
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
