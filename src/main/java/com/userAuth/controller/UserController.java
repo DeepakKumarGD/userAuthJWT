@@ -4,6 +4,7 @@ import com.userAuth.payload.JwtAuthenticationResponse;
 import com.userAuth.payload.LoginRequest;
 import com.userAuth.repository.UserRepository;
 import com.userAuth.security.JwtTokenProvider;
+import com.userAuth.service.CustomUserDetailsService;
 import com.userAuth.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -16,6 +17,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,6 +36,9 @@ public class UserController {
     private JwtTokenProvider tokenProvider;
 
     @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
     private UserService userService;
 
     @PostMapping("/signin")
@@ -43,6 +48,8 @@ public class UserController {
                 loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+//        final UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequest.getUsernameOrEmail());
         String jwt = tokenProvider.generateToken(authentication);
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }

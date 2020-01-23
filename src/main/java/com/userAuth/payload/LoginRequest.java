@@ -1,11 +1,11 @@
 package com.userAuth.payload;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
 @NoArgsConstructor
 public class LoginRequest {
     @NotBlank
@@ -16,6 +16,22 @@ public class LoginRequest {
 
     public LoginRequest(@NotBlank String usernameOrEmail, @NotBlank String password) {
         this.usernameOrEmail = usernameOrEmail;
+        this.password = password;
+    }
+
+    public String getUsernameOrEmail() {
+        return usernameOrEmail;
+    }
+
+    public void setUsernameOrEmail(String usernameOrEmail) {
+        this.usernameOrEmail = usernameOrEmail;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
         this.password = password;
     }
 }

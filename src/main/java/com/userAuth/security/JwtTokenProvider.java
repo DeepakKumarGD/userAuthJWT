@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.function.Function;
 
 @Component
 public class JwtTokenProvider {
@@ -21,13 +22,9 @@ public class JwtTokenProvider {
     private int jwtExpirationInMs;
 
     public String generateToken(Authentication authentication) {
-
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
-
-
         return Jwts.builder()
                 .setId(Long.toString(userPrincipal.getId()))
                 .setSubject(userPrincipal.toJson())
@@ -38,12 +35,20 @@ public class JwtTokenProvider {
     }
 
     public Long getUserIdFromJWT(String token) {
+        return Long.parseLong(extractClaims(token, Claims::getId));
+    }
+
+    public Claims extractAllClaims(String token){
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
+        return claims;
+    }
 
-        return Long.parseLong(claims.getId());
+    public <T> T extractClaims(String token, Function<Claims, T> claimsResolver){
+        Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
     }
 
     public boolean validateToken(String authToken) {
