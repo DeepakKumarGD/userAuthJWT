@@ -102,6 +102,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>userAuth-0.0.1</finalName>
 	</build>
 
 </project>
